@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MDMController</string>
+    <string name="welcome_text">Welcome to MDMParent app</string>
+    <string name="get_message_text">Please enter a message in the box below and hit send</string>
+</resources>
