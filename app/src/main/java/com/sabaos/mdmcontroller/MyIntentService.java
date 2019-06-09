@@ -110,12 +110,11 @@ public class MyIntentService extends IntentService {
         }
 
 
-
         SharedPref sharedPref = new SharedPref(getApplicationContext());
         Bundle bundle = intent.getExtras();
-        if(bundle.getString("type").equalsIgnoreCase("appServerRegister")){
+        if (bundle.getString("type").equalsIgnoreCase("appServerRegister")) {
 
-            if(bundle.getString("app").equalsIgnoreCase("com.sabaos.testmarketapp")){
+            if (bundle.getString("app").equalsIgnoreCase("com.sabaos.testmarketapp")) {
 
                 sharedPref.saveData("marketToken", bundle.getString("token"));
                 Log.i("saved market token", sharedPref.loadData("marketToken"));
@@ -123,12 +122,12 @@ public class MyIntentService extends IntentService {
                 responseIntent.putExtra("type", "appServerRegister");
                 responseIntent.putExtra("result", "success");
                 responseIntent.setComponent(new ComponentName("com.sabaos.testmarketapp", "com.sabaos.testmarketapp.MyIntentService"));
-                if(Build.VERSION.SDK_INT >= 26){
+                if (Build.VERSION.SDK_INT >= 26) {
 
                     getApplicationContext().startForegroundService(responseIntent);
                 } else getApplicationContext().startService(responseIntent);
 
-            }else if (bundle.getString("app").equalsIgnoreCase("com.sabaos.testriotapp")){
+            } else if (bundle.getString("app").equalsIgnoreCase("com.sabaos.testriotapp")) {
 
                 sharedPref.saveData("riotToken", bundle.getString("token"));
                 Log.i("saved riot token", sharedPref.loadData("riotToken"));
@@ -136,7 +135,7 @@ public class MyIntentService extends IntentService {
                 responseIntent.putExtra("type", "appServerRegister");
                 responseIntent.putExtra("result", "success");
                 responseIntent.setComponent(new ComponentName("com.sabaos.testriotapp", "com.sabaos.testriotapp.MyIntentService"));
-                if(Build.VERSION.SDK_INT >= 26){
+                if (Build.VERSION.SDK_INT >= 26) {
 
                     getApplicationContext().startForegroundService(responseIntent);
                 } else getApplicationContext().startService(responseIntent);

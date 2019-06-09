@@ -34,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
         final String messsageString = "{" +
                 "\"type\":\"sendpush\"," +
                 "\"token\":\"" + new SharedPref(getApplicationContext()).loadData("marketToken") +
-                "\",\"data\":\""+ "first test push message" +"\"" +
+                "\",\"data\":\"" + "first test push message" + "\"" +
                 "}";
 
 
-        OkHttpClient client = new OkHttpClient.Builder().pingInterval(4, TimeUnit.SECONDS).connectTimeout(1,TimeUnit.DAYS).build();
+        OkHttpClient client = new OkHttpClient.Builder().pingInterval(4, TimeUnit.SECONDS).connectTimeout(1, TimeUnit.DAYS).build();
         Request request = new Request.Builder().url("ws://echo.websocket.org").build();
         WebSocketListener listener = new WebSocketListener() {
             @Override
