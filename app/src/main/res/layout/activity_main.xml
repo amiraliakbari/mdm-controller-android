@@ -42,8 +42,15 @@
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10pt"
             android:onClick="pushMessage"
-            android:text="send"
-            android:layout_marginTop="10pt"/>
+            android:text="send" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="display token"
+            android:onClick="showToken"/>
     </LinearLayout>
 </RelativeLayout>

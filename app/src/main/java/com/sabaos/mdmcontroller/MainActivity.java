@@ -1,34 +1,27 @@
 package com.sabaos.mdmcontroller;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import java.util.concurrent.TimeUnit;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+import okio.ByteString;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,34 +30,68 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pushMessage(View view) {
-        EditText text_box = (EditText) findViewById(R.id.textbox1);
-        String message = text_box.getText().toString();
-        String url = "https://push.sabaos.com/message?token=A7c4.Ga4He5wybY";
-        RequestQueue MyRequestQueue = Volley.newRequestQueue(this);
-        JSONObject json = new JSONObject();
-        try {
-            json.put("message",message);
-            json.put("priority",2);
-            json.put("title","Message from dad!");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, json,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
 
-                    }
-                }, new Response.ErrorListener() {
+        final String messsageString = "{" +
+                "\"type\":\"sendpush\"," +
+                "\"token\":\"" + new SharedPref(getApplicationContext()).loadData("marketToken") +
+                "\",\"data\":\""+ "first test push message" +"\"" +
+                "}";
+
+
+        OkHttpClient client = new OkHttpClient.Builder().pingInterval(4, TimeUnit.SECONDS).connectTimeout(1,TimeUnit.DAYS).build();
+        Request request = new Request.Builder().url("ws://echo.websocket.org").build();
+        WebSocketListener listener = new WebSocketListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onOpen(WebSocket webSocket, Response response) {
+                super.onOpen(webSocket, response);
+
+                webSocket.send(messsageString);
+            }
+
+            @Override
+            public void onMessage(WebSocket webSocket, String text) {
+                super.onMessage(webSocket, text);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onMessage(WebSocket webSocket, ByteString bytes) {
+                super.onMessage(webSocket, bytes);
+
 
             }
-        });
-        jsonObjectRequest.setTag("tag");
-        MyRequestQueue.add(jsonObjectRequest);
-        text_box.setText("");
+
+            @Override
+            public void onClosing(WebSocket webSocket, int code, String reason) {
+                super.onClosing(webSocket, code, reason);
+                Log.i("Main Activity WebSocket", "");
+            }
+
+            @Override
+            public void onClosed(WebSocket webSocket, int code, String reason) {
+                super.onClosed(webSocket, code, reason);
+                Log.i("Main Activity WebSocket", "");
+            }
+
+            @Override
+            public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
+//                super.onFailure(webSocket, t, response);
+                Log.i("Main Activity WebSocket", "");
+
+            }
+        };
+        WebSocket ws = client.newWebSocket(request, listener);
+
     }
 
+    public void showToken(View view) {
+        EditText editText = (EditText) findViewById(R.id.textbox1);
+        editText.setText(new SharedPref(getApplicationContext()).loadData("marketToken"));
+    }
 }
 
