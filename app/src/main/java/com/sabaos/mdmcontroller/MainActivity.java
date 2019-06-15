@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         OkHttpClient client = new OkHttpClient.Builder().pingInterval(4, TimeUnit.SECONDS).connectTimeout(1, TimeUnit.DAYS).build();
-        Request request = new Request.Builder().url("ws://echo.websocket.org").build();
+        Request request = new Request.Builder().url("wss://push.sabaos.com").build();
         WebSocketListener listener = new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     }
                 });
             }
