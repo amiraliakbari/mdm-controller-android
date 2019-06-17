@@ -60,7 +60,8 @@ public class MyIntentService extends IntentService {
             Intent responseIntent = new Intent();
             responseIntent.putExtra("type", "appServerRegister");
             responseIntent.putExtra("result", "success");
-            responseIntent.setComponent(new ComponentName("com.sabaos.testmarketapp", "com.sabaos.testmarketapp.SabaClientService"));
+            String app = bundle.getString("app");
+            responseIntent.setComponent(new ComponentName(app, app + ".SabaClientService"));
             if (Build.VERSION.SDK_INT >= 26) {
 
                 getApplicationContext().startForegroundService(responseIntent);

@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
                 super.onOpen(webSocket, response);
 
                 webSocket.send(messsageString);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Controller WebSocket open", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
@@ -69,23 +75,40 @@ public class MainActivity extends AppCompatActivity {
             public void onClosing(WebSocket webSocket, int code, String reason) {
                 super.onClosing(webSocket, code, reason);
                 Log.i("Main Activity WebSocket", "");
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Controller WebSocket Closing", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onClosed(WebSocket webSocket, int code, String reason) {
                 super.onClosed(webSocket, code, reason);
                 Log.i("Main Activity WebSocket", "");
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Controller WebSocket Closed", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
 //                super.onFailure(webSocket, t, response);
                 Log.i("Main Activity WebSocket", "");
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Controller WebSocket Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         };
         WebSocket ws = client.newWebSocket(request, listener);
-
     }
 
     public void showToken(View view) {

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name="com.sabaos.mdmcontroller.MyIntentService"
+            android:name=".MyIntentService"
             android:exported="true"
             android:enabled="true"></service>
 
